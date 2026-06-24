@@ -1,0 +1,58 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: backend
+  datasource:
+    url: jdbc:mysql://localhost:3308/quiz_mvp?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  sql:
+    init:
+      mode: never   # 是否自动执行 schema.sql / data.sql
+      # never → 不执行（推荐，避免误初始化生产库）
+      # always → 每次启动都执行
+      # embedded → 仅嵌入式数据库执行
+      encoding: UTF-8   # SQL 文件编码
+
+  data:
+    redis:
+      host: localhost   # Redis 地址（缓存、分布式锁等）
+      port: 6379        # Redis 默认端口
+
+  rabbitmq:
+    host: 192.168.159.128     # RabbitMQ 地址（消息队列，用于异步处理）
+    port: 5672          # 默认端口
+    username: admin     # 登录用户名
+    password: admin     # 登录密码
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    # 开启数据库字段下划线 → Java 驼峰自动映射
+    # 例如：user_name → userName
+  global-config:
+    db-config:
+      id-type: auto
+      # 主键策略：
+      # auto → 数据库自增（最常用）
+      # assign_id → 雪花算法（分布式推荐）
+
+app:
+  jwt:
+    secret: d65rygf6trdf54es45rdf89uhj0oi09uih76ff544es554hh
+    # JWT 密钥（用于签名 token）
+    # 1. 至少 32 位
+    # 2. 不写死在代码中（放配置中心或环境变量）
+
+    expiration-days: 7
+    # token 过期时间（单位：天）
+    # 登录后 7 天失效
+
+  cors:
+    allowed-origin: http://localhost:5173
+    # 允许跨域访问的前端地址
+    # 5173 → 通常是 Vite 前端开发端口
